@@ -27,4 +27,13 @@
 
   <!-- -*- extra stuff goes here -*- -->
 
+    <plone:behavior
+        title="Geocoding Behavior"
+        description="An Example of geocoding dexterity behavior"
+        provides=".geocodingbehavior.IGeocodingBehavior"
+        factory=".geocodingbehavior.GeocodingBehavior"
+        for="plone.dexterity.interfaces.IDexterityContent"
+        />
+
+
 </configure>
