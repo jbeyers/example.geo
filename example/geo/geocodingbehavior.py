@@ -47,7 +47,7 @@ alsoProvides(IGeocodingBehavior,IFormFieldProvider)
 
 def context_property(name):
     def getter(self):
-        return getattr(self.context, name)
+        return getattr(self.context, name, None)
     def setter(self, value):
         setattr(self.context, name, value)
     def deleter(self):
@@ -65,12 +65,13 @@ class GeocodingBehavior(object):
         self.context = context
 
     # -*- Your behavior property setters & getters here ... -*-
+    address = context_property('address')
+    lat = context_property('lat')
+    lng = context_property('lng')
 
 def geocode(obj, event):
     if not obj.lat or not obj.lng:
-        address = ', '.join([getattr(obj, i) for i in
-                  ['street', 'suburb', 'town', 'postal_code'] if getattr(obj, i)])
-        url = 'http://maps.googleapis.com/maps/api/geocode/json?address=%s&region=au&sensor=false' % urllib.quote(address)
+        url = 'http://maps.googleapis.com/maps/api/geocode/json?address=%s&region=au&sensor=false' % urllib.quote(obj.address)
         geocode = urllib.urlopen(url).read()
         data = simplejson.loads(geocode)
         if data['status'] == 'OK':
