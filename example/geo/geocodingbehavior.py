@@ -83,8 +83,18 @@ def geocode(obj, event):
 
 @grok.subscribe(IDexterityContent, IObjectCreatedEvent)
 def add_latlng(obj, event):
+    # todo: This is ugly
+    try:
+        test = IGeocodingBehavior(obj)
+    except:
+        return
     geocode(obj, event)
 
 @grok.subscribe(IDexterityContent, IObjectModifiedEvent)
 def add_latlng(obj, event):
+    # todo: This is ugly
+    try:
+        test = IGeocodingBehavior(obj)
+    except:
+        return
     geocode(obj, event)
