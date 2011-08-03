@@ -70,21 +70,21 @@ class GeocodingBehavior(object):
     lng = context_property('lng')
 
 def geocode(obj, event):
-    if not obj.lat or not obj.lng:
-        url = 'http://maps.googleapis.com/maps/api/geocode/json?address=%s&region=au&sensor=false' % urllib.quote(obj.address)
+    if not IGeocodingBehavior(obj).lat or not IGeocodingBehavior(obj).lng:
+        url = 'http://maps.googleapis.com/maps/api/geocode/json?address=%s&region=au&sensor=false' % urllib.quote(IGeocodingBehavior(obj).address)
         geocode = urllib.urlopen(url).read()
         data = simplejson.loads(geocode)
         if data['status'] == 'OK':
             if data['results']:
                 location = data['results'][0]['geometry']['location']
-                obj.lat = float(location['lat'])
-                obj.lng = float(location['lng'])
+                IGeocodingBehavior(obj).lat = float(location['lat'])
+                IGeocodingBehavior(obj).lng = float(location['lng'])
                 transaction.commit
 
-@grok.subscribe(IGeocodingBehavior, IObjectCreatedEvent)
-def supplier_created(obj, event):
+@grok.subscribe(IDexterityContent, IObjectCreatedEvent)
+def add_latlng(obj, event):
     geocode(obj, event)
 
-@grok.subscribe(IGeocodingBehavior, IObjectModifiedEvent)
-def supplier_modified(obj, event):
+@grok.subscribe(IDexterityContent, IObjectModifiedEvent)
+def add_latlng(obj, event):
     geocode(obj, event)
