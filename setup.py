@@ -26,6 +26,7 @@ setup(name='example.geo',
       zip_safe=False,
       install_requires=[
           'setuptools',
+          'simplejson',
           'plone.app.dexterity',
           # -*- Extra requirements: -*-
       ],
